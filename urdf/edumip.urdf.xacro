@@ -1,0 +1,73 @@
+<robot name="robot" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+   <xacro:include filename="$(find edumip_description)/urdf/edumip.xacro"/>
+
+    <xacro:property name="body_height" value="0.1" />
+    <xacro:property name="body_width" value="0.050" />
+    <xacro:property name="body_length" value="0.035" />
+    <xacro:property name="wheel_separation" value="0.070" />
+    <xacro:property name="wheel_radius" value="0.034" />
+    <xacro:property name="wheel_width" value="0.010" />
+
+<xacro:property name="left_origin">
+  <origin xyz="0 0 0" rpy="1.57 0 0 "/>
+</xacro:property>
+
+<xacro:property name="right_origin">
+  <origin xyz="0 0 0" rpy="1.57 0 0 "/>
+</xacro:property>
+
+  <link name="world"/>
+
+  <xacro:base_link link_name="base_link" 
+                   body_height="${body_height}" 
+                   body_width="${body_width}"
+                   body_length="${body_length}"/>
+                   
+
+  <xacro:wheel prefix="left" 
+               wheel_width="${wheel_width}" 
+               wheel_radius="${wheel_radius}">
+    <xacro:insert_block name="left_origin" />
+  </xacro:wheel>
+
+  <xacro:wheel prefix="right" 
+               wheel_width="${wheel_width}" 
+               wheel_radius="${wheel_radius}">
+    <xacro:insert_block name="right_origin" />
+  </xacro:wheel>
+
+
+  <joint name="q0" type="fixed">
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <parent link="world"/>
+    <child link="base_link"/>
+    <axis xyz="0 0 1"/>
+  </joint>
+
+  <joint name="q1" type="continuous">
+    <origin xyz=" 0 ${0.5*wheel_separation} 0 " rpy = "0 0 0" />
+    <parent link="base_link"/>
+    <child link="left_wheel"/>
+    <axis xyz="0 1 0"/>
+  </joint>
+
+  <joint name="q2" type="continuous">
+    <origin xyz=" 0 ${-0.5*wheel_separation} 0 " rpy = "0 0 0" />
+    <parent link="base_link"/>
+    <child link="right_wheel"/>
+    <axis xyz="0 1 0"/>
+  </joint>
+
+<!--   
+
+  <joint name="q3" type="fixed">
+    <origin xyz="0 0 0.5" rpy="0 0 0"/>
+    <parent link="robot_link_2"/>
+    <child link="robot_flange"/>
+    <axis xyz="0 0 1"/>
+
+    <limit lower="-1" upper="1" effort="1" velocity="1"/>
+  </joint> -->
+
+</robot>
